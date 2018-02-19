@@ -1,3 +1,5 @@
+package Week2;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -9,7 +11,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     private class Node
     {
-        public Item item;
+        Item item;
         Node nextFirst, nextLast;
         Node next;
 
@@ -126,30 +128,5 @@ public class Deque<Item> implements Iterable<Item> {
                 throw new UnsupportedOperationException();
             }
         };
-    }
-
-    public void check() {
-
-        Node tempLast = iter;
-        while (tempLast != null) {
-            System.out.println(tempLast);
-            tempLast = tempLast.next;
-        }
-
-    }
-    public static void main(String[] args) {
-      /*  Deque<String> deque = new Deque<>();;
-        deque.addFirst("A");
-        deque.addFirst("B");
-        deque.removeFirst();
-        deque.addLast("C");
-        deque.addLast("D");
-        deque.addLast("E");
-        deque.removeLast();
-        for(String s : deque) {
-            System.out.println(s);
-        }
-        System.out.println(deque.size());
-*/
     }
 }
