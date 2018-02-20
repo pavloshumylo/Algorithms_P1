@@ -6,109 +6,80 @@ import java.util.NoSuchElementException;
 public class Deque<Item> implements Iterable<Item> {
 
     private Node first, last;
-    private Node reverseFirst, reverseLast;
-    private Node iter;
 
     private class Node
     {
         Item item;
-        Node nextFirst, nextLast;
-        Node next;
-
-        @Override
-        public String toString() {
-            return (String) item;
-        }
+        Node next, before;
     }
 
     public Deque() {
     }
 
     public boolean isEmpty() {
-        return first == null && last == null;
+        if (first == null && last == null) return true;
+        else return false;
     }
     public int size() {
         int count = 0;
-        Node var = iter;
-        while(var != null)
+        Node var = first;
+        while (var != null)
         {
             count++;
             var = var.next;
         }
         return count;
     }
+
     public void addFirst(Item item) {
-        if(item == null) throw new IllegalArgumentException();
+        if (item == null) throw new IllegalArgumentException();
         Node oldFirst = first;
         first = new Node();
-        iter = first;
         first.item = item;
-        first.nextFirst = oldFirst;
-        if(first.nextFirst == null) {
-            first.next = reverseLast;
-            reverseFirst = first;
-        }
-        else {
-            first.next = first.nextFirst;
-        }
+        first.next = oldFirst;
+        if (oldFirst != null) oldFirst.before = first;
+        if (last == null) last = first;
     }
+
     public void addLast(Item item) {
-        if(item == null) throw new IllegalArgumentException();
+        if (item == null) throw new IllegalArgumentException();
         Node oldLast = last;
         last = new Node();
         last.item = item;
-        last.nextLast = oldLast;
-        if(last.nextLast == null) {
-            reverseLast = last;
-            if(reverseFirst != null) {
-                reverseFirst.next = reverseLast;
-            }
-            else {
-                iter = reverseLast;
-            }
-        }
-        else {
-            Node temp = last.nextLast;
-            temp.next = last;
-        }
+        last.before = oldLast;
+        if (oldLast != null)  oldLast.next = last;
+        if (first == null) first = last;
+
     }
     public Item removeFirst() {
-        if(isEmpty()) throw new NoSuchElementException();
-        if(first == null) {
-            return null;
+        if (isEmpty()) throw new NoSuchElementException();
+        Item item = first.item;
+        if (first == last) {
+            first = null;
+            last = null;
         }
         else {
-            Item item = first.item;
-            first = first.nextFirst;
-            iter = first;
-            if (first == null) {
-                reverseFirst = null;
-                iter = reverseLast;
-            }
-            return item;
+            first = first.next;
         }
+        return item;
     }
     public Item removeLast() {
-        if(isEmpty()) throw new NoSuchElementException();
-        if(last == null) {
-            return null;
+        if (isEmpty()) throw new NoSuchElementException();
+        Item item = last.item;
+        if (last == first) {
+            last = null;
+            first = null;
         }
         else {
-            Item item = last.item;
-            last = last.nextLast;
-
-            if (last != null) {
-                last.next = null;
-            } else {
-                reverseLast = null;
-                reverseFirst.next = null;
-            }
-            return item;
+            last = last.before;
+            last.next = null;
         }
+        return item;
     }
     public Iterator<Item> iterator() {
+
         return new Iterator<Item>() {
-            Node firstTemp = iter;
+            Node firstTemp = first;
 
             @Override
             public boolean hasNext() {
@@ -117,7 +88,7 @@ public class Deque<Item> implements Iterable<Item> {
 
             @Override
             public Item next() {
-                if(firstTemp == null) throw new NoSuchElementException();
+                if (firstTemp == null) throw new NoSuchElementException();
                 Item item = firstTemp.item;
                 firstTemp = firstTemp.next;
                 return item;
@@ -129,4 +100,5 @@ public class Deque<Item> implements Iterable<Item> {
             }
         };
     }
+
 }

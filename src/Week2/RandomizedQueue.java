@@ -31,55 +31,31 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     public void enqueue(Item item) {
-        if(item == null) throw new IllegalArgumentException();
+        if (item == null) throw new IllegalArgumentException();
         Node oldLast = last;
         last = new Node();
         last.item = item;
-        if(isEmpty()) first = last;
+        if (isEmpty()) first = last;
         else oldLast.next = last;
     }
 
     public Item dequeue() {
-        if(isEmpty()) throw new NoSuchElementException();
-        int random = StdRandom.uniform(size());
-        if (random == 0) random++;
-        if (random == 1) {
+        if (isEmpty()) throw new NoSuchElementException();
             Item item = first.item;
             first = first.next;
-            if(isEmpty()) last = null;
+            if (isEmpty()) last = null;
             return item;
-        }
-        else {
-            Node node = first;
-            int count = 0;
-            while (node != null) {
-                count++;
-                if (count == random) {
-                    Node nextNode = node.next;
-                    Node newFirst = first;
-                    int newCount = 1;
-                    while (newCount < count) {
-                        if (newCount == count - 1) {
-                            newFirst.next = nextNode;
-                        } else newFirst = newFirst.next;
-                        newCount++;
-                    }
-                    return node.item;
-                } else node = node.next;
-            }
-            return null;
-        }
     }
 
     public Item sample() {
-        if(isEmpty()) throw new NoSuchElementException();
+        if (isEmpty()) throw new NoSuchElementException();
         int random = StdRandom.uniform(size());
         if (random == 0) random++;
         Node node = first;
         int count = 0;
         while (node != null) {
             count++;
-            if(count == random) return node.item;
+            if (count == random) return node.item;
             else node = node.next;
         }
        return null;
@@ -96,7 +72,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
             @Override
             public Item next() {
-                if(iter == null) throw new NoSuchElementException();
+                if (iter == null) throw new NoSuchElementException();
                 Item item = iter.item;
                 iter = iter.next;
                 return item;
